@@ -47,8 +47,12 @@ section{
 
 .card{
     background:#1e293b;
-    padding:0px;
+    padding:20px;
     border-radius:10px;
+}
+
+.image{
+    border-raduis:10px;
 }
 
 footer{
