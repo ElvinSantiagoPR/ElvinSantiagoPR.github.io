@@ -52,7 +52,8 @@ section{
 }
 
 .image{
-    border-raduis:10px;
+    background:#1e293b;
+    border-radius:10px;
 }
 
 footer{
