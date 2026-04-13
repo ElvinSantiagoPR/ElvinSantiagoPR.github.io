@@ -37,24 +37,7 @@ Also familiar with Java, C#, Visual Basic, HTML, and CSS.
 <section id="projects">
 <h2>Projects</h2>
 
-<div class="projects">
-
-<div class="card">
-<h3>Unreal Engine Game</h3>
-<p>Midterm project using C++ and AI behavior trees.</p>
-</div>
-
-<div class="card">
-<h3>Twine Narrative Game</h3>
-<p>Interactive story project with custom styling.</p>
-</div>
-
-<div class="card">
-<h3>Web Programming Projects</h3>
-<p>Responsive HTML, CSS, and Bootstrap projects.</p>
-</div>
-
-</div>
+<div class="projects"></div>
 </section>
 
 <section id="contact">
@@ -99,6 +82,7 @@ async function loadRepos() {
         card.innerHTML = `
             <h3>${repo.name}</h3>
             <p>${repo.description || "No description available."}</p>
+            <p>🧠 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
             <a href="${repo.html_url}" target="_blank">View on GitHub</a>
         `;
 
