@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             card.innerHTML = `
                 <h3>${isFeatured ? "🔥 " : ""}🎮 ${repo.name}</h3>
                 <p>${repo.description || "No description available."}</p>
-                <p>💾 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
+                <p>💾 ${repo.language || "Unknown"}</p>
                 <a href="${repo.html_url}" target="_blank">View on GitHub</a>
             `;
 
