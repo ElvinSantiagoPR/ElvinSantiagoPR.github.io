@@ -79,11 +79,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     const repos = await response.json();
     const container = document.querySelector(".projects");
 
-    // Process repos
+    const baseMediaURL = "https://raw.githubusercontent.com/ElvinSantiagoPR/ElvinSantiagoPR-media/main/";
+
     for (const repo of repos
         .filter(repo => 
-            repo.topics?.includes("portfolio") &&       // must have topic
-            !repo.description?.includes("[hide]")       // hide tagged repos
+            repo.topics?.includes("portfolio") &&
+            !repo.topics?.includes("hide")
         )
         .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
         .slice(0, 6)
@@ -94,19 +95,26 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         let repoURL = repo.html_url;
         let parentName = "";
+        let mediaName = repo.name;
 
-        // If it's a fork, get original repo info
+        // If it's a fork → get original repo info
         if (isFork) {
             try {
                 const fullData = await fetch(repo.url).then(r => r.json());
                 if (fullData.parent) {
                     repoURL = fullData.parent.html_url;
                     parentName = fullData.parent.full_name;
+
+                    // Use original repo name for media
+                    mediaName = fullData.parent.name;
                 }
             } catch (err) {
                 console.error("Error fetching parent repo:", err);
             }
         }
+
+        const imageURL = baseMediaURL + mediaName + ".png";
+        const videoURL = baseMediaURL + mediaName + ".mp4";
 
         const card = document.createElement("div");
         card.className = "card";
@@ -119,11 +127,20 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             ${isFork && parentName ? `<p>👥 Based on: ${parentName}</p>` : ""}
 
+            <img src="${imageURL}" 
+                 class="project-img"
+                 onerror="this.style.display='none'">
+
+            <video class="project-video" controls
+                   onerror="this.style.display='none'">
+                <source src="${videoURL}" type="video/mp4">
+            </video>
+
             <p>${repo.description || "No description available."}</p>
 
-            <p>🧠 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
+            <p>💾 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
 
-            <a href="${repoURL}" target="_blank">🚀 View on GitHub</a>
+            <a href="${repoURL}" target="_blank">View on GitHub</a>
         `;
 
         container.appendChild(card);
