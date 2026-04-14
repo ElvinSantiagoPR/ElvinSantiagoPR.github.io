@@ -79,30 +79,55 @@ document.addEventListener("DOMContentLoaded", async function () {
     const repos = await response.json();
     const container = document.querySelector(".projects");
 
-    repos
+    // Process repos
+    for (const repo of repos
         .filter(repo => 
-            !repo.fork &&
             repo.topics?.includes("portfolio") &&       // must have topic
-            !repo.topics?.includes("hide")       // hide tagged repos
+            !repo.description?.includes("[hide]")       // hide tagged repos
         )
         .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
         .slice(0, 6)
-        .forEach(repo => {
+    ) {
 
-            const isFeatured = repo.description?.includes("[featured]");
+        const isFeatured = repo.description?.includes("[featured]");
+        const isFork = repo.fork;
 
-            const card = document.createElement("div");
-            card.className = "card";
+        let repoURL = repo.html_url;
+        let parentName = "";
 
-            card.innerHTML = `
-                <h3>${isFeatured ? "🔥 " : ""}🎮 ${repo.name}</h3>
-                <p>${repo.description || "No description available."}</p>
-                <p>💾 ${repo.language || "Unknown"}</p>
-                <a href="${repo.html_url}" target="_blank">View on GitHub</a>
-            `;
+        // If it's a fork, get original repo info
+        if (isFork) {
+            try {
+                const fullData = await fetch(repo.url).then(r => r.json());
+                if (fullData.parent) {
+                    repoURL = fullData.parent.html_url;
+                    parentName = fullData.parent.full_name;
+                }
+            } catch (err) {
+                console.error("Error fetching parent repo:", err);
+            }
+        }
 
-            container.appendChild(card);
-        });
+        const card = document.createElement("div");
+        card.className = "card";
+
+        card.innerHTML = `
+            <h3>
+                ${isFeatured ? "🔥 " : ""}
+                ${isFork ? "👥" : "🎮"} ${repo.name}
+            </h3>
+
+            ${isFork && parentName ? `<p>👥 Based on: ${parentName}</p>` : ""}
+
+            <p>${repo.description || "No description available."}</p>
+
+            <p>🧠 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
+
+            <a href="${repoURL}" target="_blank">🚀 View on GitHub</a>
+        `;
+
+        container.appendChild(card);
+    }
 
 });
 </script>
