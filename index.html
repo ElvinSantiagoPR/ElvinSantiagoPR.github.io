@@ -97,15 +97,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         let parentName = "";
         let mediaName = repo.name;
 
-        // If it's a fork → get original repo info
         if (isFork) {
             try {
                 const fullData = await fetch(repo.url).then(r => r.json());
                 if (fullData.parent) {
                     repoURL = fullData.parent.html_url;
                     parentName = fullData.parent.full_name;
-
-                    // Use original repo name for media
                     mediaName = fullData.parent.name;
                 }
             } catch (err) {
@@ -124,43 +121,47 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ${isFeatured ? "🔥 " : ""}
                 ${isFork ? "👥" : "🎮"} ${repo.name}
             </h3>
-        
+
             ${isFork && parentName ? `<p>👥 Based on: ${parentName}</p>` : ""}
-        
+
             <div class="media-wrapper">
                 <img src="${imageURL}" class="project-img" alt="${repo.name} thumbnail"
                      onerror="this.style.display='none'">
-        
+
                 <video class="project-video" controls preload="none" style="display: none;"
                        onerror="this.style.display='none'">
                     <source src="${videoURL}" type="video/mp4">
                 </video>
             </div>
-        
+
             <p>${repo.description || "No description available."}</p>
-        
+
             <p>💾 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
-        
-            <i class="fa-regular fa-envelope"></i><a href="${repoURL}" target="_blank">View on GitHub</a>
+
+            <a href="${repoURL}" target="_blank">View on GitHub</a>
         `;
 
-      if (image && video) {
-          mediaWrapper.style.cursor = "pointer";
-      
-          mediaWrapper.addEventListener("click", function () {
-              if (image.style.display !== "none") {
-                  image.style.display = "none";
-                  video.style.display = "block";
-                  video.play();
-              } else {
-                  video.pause();
-                  video.currentTime = 0;
-                  video.style.display = "none";
-                  image.style.display = "block";
-              }
-          });
-      }
-      
+        const mediaWrapper = card.querySelector(".media-wrapper");
+        const image = card.querySelector(".project-img");
+        const video = card.querySelector(".project-video");
+
+        if (mediaWrapper && image && video) {
+            mediaWrapper.style.cursor = "pointer";
+
+            mediaWrapper.addEventListener("click", function () {
+                if (image.style.display !== "none") {
+                    image.style.display = "none";
+                    video.style.display = "block";
+                    video.play().catch(() => {});
+                } else {
+                    video.pause();
+                    video.currentTime = 0;
+                    video.style.display = "none";
+                    image.style.display = "block";
+                }
+            });
+        }
+
         container.appendChild(card);
     }
 
