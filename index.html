@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         const imageURL = baseMediaURL + mediaName + ".png";
-        const videoURL = baseMediaURL + mediaName + ".gif";
+        const videoURL = baseMediaURL + mediaName + ".mp4";
 
         const card = document.createElement("div");
         card.className = "card";
@@ -124,25 +124,43 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ${isFeatured ? "🔥 " : ""}
                 ${isFork ? "👥" : "🎮"} ${repo.name}
             </h3>
-
+        
             ${isFork && parentName ? `<p>👥 Based on: ${parentName}</p>` : ""}
-
-            <img src="${imageURL}" 
-                 class="project-img"
-                 onerror="this.style.display='none'">
-
-            <!-- <video class="project-video" controls
-                   onerror="this.style.display='none'">
-                <source src="${videoURL}" type="video/gif">
-            </video> -->
-
+        
+            <div class="media-wrapper">
+                <img src="${imageURL}" class="project-img" alt="${repo.name} thumbnail"
+                     onerror="this.style.display='none'">
+        
+                <video class="project-video" controls preload="none" style="display: none;"
+                       onerror="this.style.display='none'">
+                    <source src="${videoURL}" type="video/mp4">
+                </video>
+            </div>
+        
             <p>${repo.description || "No description available."}</p>
-
+        
             <p>💾 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
-
-            <a href="${repoURL}" target="_blank">View on GitHub</a>
+        
+            <i class="fa-regular fa-envelope"></i><a href="${repoURL}" target="_blank">View on GitHub</a>
         `;
 
+      if (image && video) {
+          mediaWrapper.style.cursor = "pointer";
+      
+          mediaWrapper.addEventListener("click", function () {
+              if (image.style.display !== "none") {
+                  image.style.display = "none";
+                  video.style.display = "block";
+                  video.play();
+              } else {
+                  video.pause();
+                  video.currentTime = 0;
+                  video.style.display = "none";
+                  image.style.display = "block";
+              }
+          });
+      }
+      
         container.appendChild(card);
     }
 
