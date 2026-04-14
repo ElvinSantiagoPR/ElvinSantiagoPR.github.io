@@ -69,16 +69,16 @@ section{
     height:auto;
 }
 
-.project-img{
-    width:100%;
-    border-radius:10px;
-    margin-bottom:10px;
+.media-wrapper{
+    width: 100%;
+    margin-bottom: 10px;
 }
 
+.project-img,
 .project-video{
-    width:100%;
-    border-radius:10px;
-    margin-bottom:10px;
+    width: 100%;
+    border-radius: 10px;
+    display: block;
 }
 
 footer{
