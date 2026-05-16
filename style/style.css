@@ -81,6 +81,14 @@ section{
     display: block;
 }
 
+.project-img {
+    display: block;
+}
+
+.project-video {
+    display: none;
+}
+
 footer{
     text-align:center;
     padding:30px;
