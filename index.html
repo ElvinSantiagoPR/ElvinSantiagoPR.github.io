@@ -93,9 +93,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     
             <img src="${project.image}" class="project-img" alt="${project.name} thumbnail">
     
-            <video class="project-video" controls preload="none" style="display:none;">
-                <source src="${project.video}" type="video/mp4">
-            </video>
+            <iframe class="project-video"
+                    src=""
+                    data-src="${project.youtube}"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                    style="display:none;">
+            </iframe>
     
             <p>${project.description}</p>
             <p>💾 ${project.language}</p>
@@ -104,19 +108,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         `;
     
         const image = card.querySelector(".project-img");
-        const video = card.querySelector(".project-video");
+        const iframe = card.querySelector(".project-video");
     
         let showingVideo = false;
     
         card.addEventListener("click", function () {
             if (!showingVideo) {
                 image.style.display = "none";
-                video.style.display = "block";
-                video.play();
+                iframe.style.display = "block";
+                iframe.src = iframe.dataset.src + "?autoplay=1";
             } else {
-                video.pause();
-                video.currentTime = 0;
-                video.style.display = "none";
+                iframe.src = "";
+                iframe.style.display = "none";
                 image.style.display = "block";
             }
             showingVideo = !showingVideo;
