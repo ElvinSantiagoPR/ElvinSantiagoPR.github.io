@@ -87,44 +87,41 @@ document.addEventListener("DOMContentLoaded", async function () {
     for (const project of customProjects) {
         const card = document.createElement("div");
         card.className = "card";
-
+    
         card.innerHTML = `
             <h3>${project.icon} ${project.name}</h3>
-
+    
             <img src="${project.image}" class="project-img" alt="${project.name} thumbnail">
-
-            <iframe class="project-video"
-                    src=""
-                    data-src="${project.youtube}"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                    style="display:none;">
-            </iframe>
-
+    
+            <video class="project-video" controls preload="none" style="display:none;">
+                <source src="${project.video}" type="video/mp4">
+            </video>
+    
             <p>${project.description}</p>
             <p>💾 ${project.language}</p>
-
+    
             <a href="${project.url}" target="_blank">🚀 Play on itch.io</a>
         `;
-
+    
         const image = card.querySelector(".project-img");
-        const iframe = card.querySelector(".project-video");
-
+        const video = card.querySelector(".project-video");
+    
         let showingVideo = false;
-
+    
         card.addEventListener("click", function () {
             if (!showingVideo) {
                 image.style.display = "none";
-                iframe.style.display = "block";
-                iframe.src = iframe.dataset.src + "?autoplay=1";
+                video.style.display = "block";
+                video.play();
             } else {
-                iframe.src = "";
-                iframe.style.display = "none";
+                video.pause();
+                video.currentTime = 0;
+                video.style.display = "none";
                 image.style.display = "block";
             }
             showingVideo = !showingVideo;
         });
-
+    
         featuredContainer.appendChild(card);
     }
 
