@@ -185,6 +185,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         });
 
+        iframe.addEventListener("click", function () {
+            iframe.style.display = "none";
+            image.style.display = "block";
+            iframe.src = "";
+        });
+
         video.addEventListener("click", function () {
             video.pause();
             video.currentTime = 0;
