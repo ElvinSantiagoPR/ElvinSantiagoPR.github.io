@@ -178,11 +178,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         image.addEventListener("click", function () {
             image.style.display = "none";
-            video.style.display = "block";
-            video.load();
-            video.play().catch(error => {
-                console.log("Video play blocked:", error);
-            });
+            iframe.style.display = "block";
+            iframe.src = iframe.dataset.src + "?autoplay=1";
         });
 
         iframe.addEventListener("click", function () {
