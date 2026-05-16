@@ -103,8 +103,11 @@ section{
 .project-img,
 .project-video{
     width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
     border-radius: 10px;
-    display: block;
 }
 
 .project-img {
@@ -113,7 +116,6 @@ section{
 }
 
 .project-video {
-    aspect-ratio: 16 / 9;
     display: none;
 }
 
