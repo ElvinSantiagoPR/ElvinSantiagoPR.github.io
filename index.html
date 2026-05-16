@@ -182,12 +182,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             iframe.src = iframe.dataset.src + "?autoplay=1";
         });
 
-        iframe.addEventListener("click", function () {
-            iframe.style.display = "none";
-            image.style.display = "block";
-            iframe.src = "";
-        });
-
         video.addEventListener("click", function () {
             video.pause();
             video.currentTime = 0;
