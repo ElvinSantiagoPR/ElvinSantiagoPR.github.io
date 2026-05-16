@@ -83,9 +83,11 @@ section{
 
 .project-img {
     display: block;
+     cursor: pointer;
 }
 
 .project-video {
+    aspect-ratio: 16 / 9;
     display: none;
 }
 
