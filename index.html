@@ -79,6 +79,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     const repos = await response.json();
     const container = document.querySelector(".projects");
 
+    const customProjects = [
+      {
+          name: "Memories of Ladein",
+          description: "",
+          language: "C++",
+          featured: true,
+          image: "//img.itch.zone/aW1nLzI3MjUyOTMxLnBuZw==/315x250%23c/YpqLkT.png",
+          video: "https://www.youtube.com/watch?v=epeBVofYc9c",
+          url: "https://schrodinger-studio.itch.io/memories-of-ladein",
+          icon: "🎮"
+      }
+    ];
+
     const baseMediaURL = "https://raw.githubusercontent.com/ElvinSantiagoPR/ElvinSantiagoPR-media/main/";
 
     for (const repo of repos
