@@ -94,6 +94,30 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const baseMediaURL = "https://raw.githubusercontent.com/ElvinSantiagoPR/ElvinSantiagoPR-media/main/";
 
+    for (const project of customProjects) {
+        const card = document.createElement("div");
+        card.className = "card";
+    
+        card.innerHTML = `
+            <h3>${project.featured ? "🔥 " : ""}${project.icon} ${project.name}</h3>
+    
+            <div class="media-wrapper">
+                <img src="${project.image}" class="project-img" alt="${project.name} thumbnail"
+                     onerror="this.style.display='none'">
+    
+                <video class="project-video" controls preload="none" style="display: none;">
+                    <source src="${project.video}" type="video/mp4">
+                </video>
+            </div>
+    
+            <p>${project.description}</p>
+            <p>💾 ${project.language}</p>
+            <a href="${project.url}" target="_blank">🚀 Play on itch.io</a>
+        `;
+    
+        container.appendChild(card);
+    }
+  
     for (const repo of repos
         .filter(repo => 
             repo.topics?.includes("portfolio") &&
