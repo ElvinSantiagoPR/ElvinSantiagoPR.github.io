@@ -94,6 +94,13 @@ section{
     }
 }
 
+@media (min-width: 900px) {
+    .featured-projects,
+    .projects {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+}
+
 .image{
     border-radius:10px;
     width:200px;
