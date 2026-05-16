@@ -99,20 +99,26 @@ document.addEventListener("DOMContentLoaded", async function () {
         card.className = "card";
     
         card.innerHTML = `
-            <h3>${project.featured ? "🔥 " : ""}${project.icon} ${project.name}</h3>
-    
-            <div class="media-wrapper">
-                <img src="${project.image}" class="project-img" alt="${project.name} thumbnail"
-                     onerror="this.style.display='none'">
-    
-                <video class="project-video" controls preload="none" style="display: none;">
-                    <source src="${project.video}" type="video/mp4">
-                </video>
-            </div>
-    
-            <p>${project.description}</p>
-            <p>💾 ${project.language}</p>
-            <a href="${project.url}" target="_blank">🚀 Play on itch.io</a>
+            <h3>
+                ${isFeatured ? "🔥 " : ""}
+                ${isFork ? "👥" : "🎮"} ${repo.name}
+            </h3>
+        
+            ${isFork && parentName ? `<p>👥 Based on: ${parentName}</p>` : ""}
+        
+            <img src="${imageURL}" class="project-img" alt="${repo.name} thumbnail"
+                 onerror="this.style.display='none'">
+        
+            <video class="project-video" controls preload="none"
+                   onerror="this.style.display='none'">
+                <source src="${videoURL}" type="video/mp4">
+            </video>
+        
+            <p>${repo.description || "No description available."}</p>
+        
+            <p>💾 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
+        
+            <a href="${repoURL}" target="_blank">View on GitHub</a>
         `;
     
         container.appendChild(card);
@@ -178,24 +184,30 @@ document.addEventListener("DOMContentLoaded", async function () {
             <a href="${repoURL}" target="_blank">View on GitHub</a>
         `;
 
-        const mediaWrapper = card.querySelector(".media-wrapper");
         const image = card.querySelector(".project-img");
         const video = card.querySelector(".project-video");
-
-        if (mediaWrapper && image && video) {
-            mediaWrapper.style.cursor = "pointer";
-
-            mediaWrapper.addEventListener("click", function () {
-                if (image.style.display !== "none") {
-                    image.style.display = "none";
-                    video.style.display = "block";
-                    video.play().catch(() => {});
-                } else {
-                    video.pause();
-                    video.currentTime = 0;
-                    video.style.display = "none";
-                    image.style.display = "block";
-                }
+        
+        if (image && video) {
+        
+            image.addEventListener("click", function () {
+        
+                image.style.display = "none";
+                video.style.display = "block";
+        
+                video.load();
+        
+                video.play().catch(error => {
+                    console.log("Video play blocked:", error);
+                });
+            });
+        
+            video.addEventListener("click", function () {
+        
+                video.pause();
+                video.currentTime = 0;
+        
+                video.style.display = "none";
+                image.style.display = "block";
             });
         }
 
