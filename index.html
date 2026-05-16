@@ -81,6 +81,15 @@ Game development student with a background in computer engineering and a strong 
 <script>
 document.addEventListener("DOMContentLoaded", async function () {
 
+    async function fileExists(url) {
+        try {
+            const res = await fetch(url, { method: "HEAD" });
+            return res.ok;
+        } catch {
+            return false;
+        }
+    }
+
     const featuredContainer = document.querySelector(".featured-projects");
     const regularContainer = document.querySelector(".projects");
 
@@ -181,45 +190,76 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const imageURL = baseMediaURL + mediaName + ".png";
         const videoURL = baseMediaURL + mediaName + ".mp4";
+        
+        const hasImage = await fileExists(imageURL);
+        const hasVideo = await fileExists(videoURL);
+        
+        let mediaHTML = "";
+        
+        // If both exist → show thumbnail + video toggle
+        if (hasImage && hasVideo) {
+            mediaHTML = `
+                <img src="${imageURL}" class="project-img" alt="${repo.name} thumbnail">
+                <video class="project-video" controls preload="none" style="display:none;">
+                    <source src="${videoURL}" type="video/mp4">
+                </video>
+            `;
+        }
+        // If only image exists → show image only
+        else if (hasImage) {
+            mediaHTML = `
+                <img src="${imageURL}" class="project-img" alt="${repo.name} thumbnail">
+            `;
+        }
+        // If only video exists → show video only
+        else if (hasVideo) {
+            mediaHTML = `
+                <video class="project-video" controls preload="none">
+                    <source src="${videoURL}" type="video/mp4">
+                </video>
+            `;
+        }
+        // If neither exists → show nothing
+        else {
+            mediaHTML = "";
+        }
 
         const card = document.createElement("div");
         card.className = "card";
 
         card.innerHTML = `
             <h3>${isFeatured ? "🔥 " : ""}${isFork ? "👥" : "🎮"} ${repo.name}</h3>
-
+        
             ${isFork && parentName ? `<p>👥 Based on: ${parentName}</p>` : ""}
-
-            <img src="${imageURL}" class="project-img" alt="${repo.name} thumbnail">
-
-            <video class="project-video" controls preload="none" style="display:none;">
-                <source src="${videoURL}" type="video/mp4">
-            </video>
-
+        
+            ${mediaHTML}
+        
             <p>${repo.description || "No description available."}</p>
             <p>💾 ${repo.language || "Unknown"} | ⭐ ${repo.stargazers_count}</p>
-
+        
             <a href="${repoURL}" target="_blank">View on GitHub</a>
         `;
 
-        const image = card.querySelector(".project-img");
-        const video = card.querySelector(".project-video");
-
-        let showingVideo = false;
-
-        card.addEventListener("click", function () {
-            if (!showingVideo) {
-                image.style.display = "none";
-                video.style.display = "block";
-                video.play();
-            } else {
-                video.pause();
-                video.currentTime = 0;
-                video.style.display = "none";
-                image.style.display = "block";
-            }
-            showingVideo = !showingVideo;
-        });
+        if (hasImage && hasVideo) {
+            const image = card.querySelector(".project-img");
+            const video = card.querySelector(".project-video");
+        
+            let showingVideo = false;
+        
+            card.addEventListener("click", function () {
+                if (!showingVideo) {
+                    image.style.display = "none";
+                    video.style.display = "block";
+                    video.play();
+                } else {
+                    video.pause();
+                    video.currentTime = 0;
+                    video.style.display = "none";
+                    image.style.display = "block";
+                }
+                showingVideo = !showingVideo;
+            });
+        }
 
         if (isFeatured) {
             featuredContainer.appendChild(card);
